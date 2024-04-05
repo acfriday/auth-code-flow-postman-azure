@@ -192,7 +192,10 @@ authentication with Microsoft with an account from your tenant where this app is
 ![image](https://github.com/acfriday/auth-code-flow-postman-azure/assets/82184168/e1c8baab-15d4-487a-b816-c6dea6ecbc31)
 
 # Code Verifier Encrypted vs Plain Output
-If the method is plain, the authorization server will check that the provided `code_verifier` matches the expected `code_challenge` string, and If the method is `SHA-256`, then the authorization server will take the provided `code_verifier` and transform it using the same hash method and compare it to the stored `code_challenge` string.
+
+* `Code verifier`: a cryptographically random string used to correlate the authorization request to the token request
+* `Code challenge`: derived from the code verifier sent in the authorization request, to be verified against later
+* `Code challenge method`: what was used to derive the code challenge
 
 When the verifier matches the expected value, the authorization server will issue an `access token` appropriately. If there is a problem, then the server responds with an `invalid_grant` error.
 
