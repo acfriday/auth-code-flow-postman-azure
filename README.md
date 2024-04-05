@@ -99,7 +99,8 @@ we'll need to retrieve this secret again later.
     Important! Record the secret's value for later use This secret value
     is never displayed again after you leave this webpage.
 `````
-![image](https://github.com/acfriday/todolist-webapp-flask-sqlite3/assets/82184168/ec90405d-b77b-4250-a2ff-61184e80dc26)
+![image](https://github.com/acfriday/auth-code-flow-postman-azure/assets/82184168/9ebe2c0d-e0a2-4afd-9cef-21819850879d)
+
 
 `````diff
 4. Now let's check the API permissions tab and verify that our app has the default access of User.Read
