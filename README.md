@@ -1,11 +1,11 @@
-# Authorization Code Flow from OAuth 2.0 with PKCE and OpenID Connect.
+# Authorization Code Flow from OAuth 2.0 with PKCE and OpenID Connect
 
 The Authorization Code Flow, enhanced with Proof Key for Code Exchange (PKCE) and integrated with OpenID Connect, provides a secure method for authorizing client applications to access server resources on behalf of users. This advanced flow builds upon OAuth 2.0, introducing additional security measures for mobile and public clients, and employs OpenID Connect for user authentication. We will illustrate this flow using Azure Cloud services and Postman.
 
 ## Prerequisites
 
-1. **Microsoft Azure** - Ensure you have proper permissions to create resources and register applications for your tenant. The licenses I personally possess are `Office 365 E5` and `Enterprise Mobility + Security E5`
-2. **Postman API Platform** - This is a popular API development tool that can downloaded for free at its website https://www.getpostman.com. I'll be using the `64bit` desktop version `v10.24.15`. We will utilize Postman to make requests to Azure's Microsoft Graph API.
+1. **Microsoft Azure** - Ensure you have proper permissions to create resources and register applications for your tenant. The licenses I personally possess are `Office 365 E5` and `Enterprise Mobility + Security E5`.
+2. **Postman API Platform** - This is a popular API development tool that can downloaded for free at its website https://www.getpostman.com. I'll be using the `64 bit` desktop version `v10.24.15`. We will utilize Postman to make requests to Azure's Microsoft Graph API.
 
 ## **The Components of OAuth 2.0**
 
@@ -30,7 +30,7 @@ The Authorization Code Flow, enhanced with Proof Key for Code Exchange (PKCE) an
 * **Token Endpoint** `/token` exchanges the `authorization code` for tokens. The request includes `grant_type=authorization_code`, `code`, `redirect_uri`, `client_id`, and `code_verifier`.
 * **Userinfo Endpoint** `/userinfo` when accessed with an access token, returns `claims` about the authenticated user.
 
-#### **`Tokens`** - Strings representing the granted permissions.
+#### **`Tokens`** - Strings representing the granted permissions
 
 * **Access Token**: Enables access to the user's data via the Authorization: `Bearer <token>` header in API requests.
 * **Refresh Token**: Used to renew an access token via the token endpoint with `grant_type=refresh_token`, without the user's interaction.
@@ -39,15 +39,15 @@ The Authorization Code Flow, enhanced with Proof Key for Code Exchange (PKCE) an
 #### **`Grants`**
 
 * **Authorization Code Grant**: Involves redirecting the user to the authorization endpoint, obtaining an authorization code, and exchanging the code for tokens at the token endpoint.
-* **Client Credentials Grant**: Used for server-to-server communication where the application acts on its own behalf. Access is granted based on the authorization of the client, not the end user
+* **Client Credentials Grant**: Used for server-to-server communication where the application acts on its own behalf. Access is granted based on the authorization of the client, not the end user.
 * **Resource Owner Password Credentials Grant**: Allows direct exchange of user credentials for access tokens. Recommended only for trusted clients, as it exposes the user's password.
 * **Implicit Grant**: Optimized for clients implemented in a browser using a scripting language. Deprecated in OAuth 2.1 due to security vulnerabilities.
 
-#### **`Scope`** - Defines the level of access the application requests.
+#### **`Scope`** - Defines the level of access the application requests
 
 * Expressed in `space-delimited strings`, such as `scope=openid profile email`, determining which resources the application can access and actions it can perform.
 
-#### **`Proof Key for Code Exchange (PKCE)`** - Enhances security for public clients.
+#### **`Proof Key for Code Exchange (PKCE)`** - Enhances security for public clients
 
 * Uses `code_challenge` and `code_challenge_method` during the authorization request, and `code_verifier` in the token exchange process to mitigate interception attacks.
 
@@ -112,7 +112,7 @@ and Token Endpoint `OAuth 2.0 token endpoint (v2)` are what we'll copy from here
 
 <details><summary><b>Instructions</b></summary>
 
-1. In `Postman`, create a new `Request` and navigate to the `Authorization tab` and select `OAuth 2.0` as the auth `type`
+1. In `Postman`, create a new `Request` and navigate to the `Authorization tab` and select `OAuth 2.0` as the auth `type`.
 
 ![image](https://github.com/acfriday/todolist-webapp-flask-sqlite3/assets/82184168/5a7eab8f-f740-45e3-a6e5-e9020891d38a)
 
@@ -130,48 +130,60 @@ and Token Endpoint `OAuth 2.0 token endpoint (v2)` are what we'll copy from here
 * Scope: `openid` `profile` `email` `https://graph.microsoft.com/user.read`
 
 
-  `Note! Remember that our 'Scope' values should be space-delimited`
+  `Note! Remember that our 'Scope' values should be space-delimited.`
 
 
 ![image](https://github.com/acfriday/auth-code-flow-postman-azure/assets/82184168/94181010-fb2c-4cfd-9b80-fbc9f6d63538)
 
-3. Scroll to the bottom and click `Get New Access Token`
+3. Scroll to the bottom and click `Get New Access Token`.
 
 ![image](https://github.com/acfriday/auth-code-flow-postman-azure/assets/82184168/ce6fdca9-c21c-4b69-992c-853c307553c3)
 
 </details>
 
-## Postman - Authenticate, Consent, Verify Retrieved Token
+## Postman - Authenticate, Retrieve Access and Identity Token
 
 <details><summary><b>Instructions</b></summary>
 
 1. You should receive a popup from Microsoft after clicking `Get New Access Token`, input your credentials to
-authentication with Microsoft with an account from your tenant where this app is registered
+authentication with Microsoft with an account from your tenant where this app is registered.
 
 ![image](https://github.com/acfriday/auth-code-flow-postman-azure/assets/82184168/b028748e-1391-46bc-a7bd-ab645e0ed142)
 
-2. After successful authentication you should receive the following acknowledgement, click `Proceed` here.
+2. After providing consent and successfully authenticating you should receive the following acknowledgement, click `Proceed` here.
 
 ![image](https://github.com/acfriday/auth-code-flow-postman-azure/assets/82184168/b030e627-430f-4d7a-865d-760298adba22)
 
-3. You should be presented with your token's details, go ahead and `use` this token.
+3. The `identity token` below is taken from another `access token` of mine as you can see from the `token name` but the format is the same, after selecting `proceed`, scroll down to the `id_token` and copy its entire value.
+
+![image](https://github.com/acfriday/auth-code-flow-postman-azure/assets/82184168/7d251414-ec8f-4548-adab-520dcdb65dda)
+
+4. Decypt this value by pasting it over on https://jwt.ms for inspection. The `authorization server` issues `id tokens` that contain `claims` that carry information about the user. You can use the `id_token` parameter to verify the user's identity with the `client` application performing the access request to begin a session with the user, these shouldn't be used for authorization as `access tokens` are used for authorization.
+
+![image](https://github.com/acfriday/auth-code-flow-postman-azure/assets/82184168/2f70d76f-9c9d-4327-aa5a-4b41ebd803a8)
+
+![image](https://github.com/acfriday/auth-code-flow-postman-azure/assets/82184168/8f4fb6e5-815b-4f1c-9cc7-8485a845970a)
+
+5. Returning to `Postman`, scroll back to the top of our `Token Details`, go ahead and `use` the `access token`.
 
 ![image](https://github.com/acfriday/auth-code-flow-postman-azure/assets/82184168/c57fe7a3-81f4-446f-8386-7afede714b10)
 
-4. Scroll to the top of `Postman` to verify our `named token` is being used for our request
+6. Scroll to the top of `Postman` after selecting `Use Token` to verify our `named` `access token` is being used in our upcoming request.
 
 ![image](https://github.com/acfriday/auth-code-flow-postman-azure/assets/82184168/39c870d4-44a3-45f9-8515-03c6973ef89d)
+
 </details>
 
 # Query and Response
 * With us now authenticated, let's use our permissions to call the `http(s)://graph.microsoft.com/v1.0/me/` `Endpoint` which allows the app to read the profile and discover relationships of the currently signed-in Microsoft account.
+
 ![image](https://github.com/acfriday/auth-code-flow-postman-azure/assets/82184168/e1c8baab-15d4-487a-b816-c6dea6ecbc31)
 
 # Code Verifier Encrypted vs Plain Output
 
-* `Code verifier`: a cryptographically random string used to correlate the `authorization request` to the `token request`
-* `Code challenge`: derived from the `code verifier` sent in the `authorization request` to be verified against later
-* `Code challenge method`: what was used to derive the `code challenge`
+* `Code verifier`: a cryptographically random string used to correlate the `authorization request` to the `token request`.
+* `Code challenge`: derived from the `code verifier` sent in the `authorization request` to be verified against later.
+* `Code challenge method`: what was used to derive the `code challenge`.
 
 When the `verifier` matches the expected value, the `authorization server` will issue an `access token` appropriately. If there is a problem, then the server responds with an `invalid_grant` error.
 
