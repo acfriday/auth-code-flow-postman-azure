@@ -64,14 +64,14 @@ The Authorization Code Flow, enhanced with Proof Key for Code Exchange (PKCE) an
 1. Sign in to the `Microsoft Entra admin center` as at least a `Cloud Application Administrator`.
 2. Browse to `Identity` > `Applications` > `App registrations` and select `New Registration`.
 
-![image](https://github.com/acfriday/todolist-webapp-flask-sqlite3/assets/82184168/86e397ac-3102-4156-a5c9-92e04ab7c499)
+![image](https://github.com/acfriday/auth-code-flow-postman-azure/assets/82184168/f5d0bcd5-1549-411d-975c-f94ac7b33116)
 
 3. Enter a `Display Name` for your application.
 4. We'll select the default `single-tenant` option.
 5. Select Web as our platform with `http(s)://localhost` (excluding the parenthesis as seen below) as our redirect URI.
 6. Complete this step by selecting `Register`.
 
-![image](https://github.com/acfriday/todolist-webapp-flask-sqlite3/assets/82184168/b0913646-6c21-4374-a599-d3ddba9b7171)
+![image](https://github.com/acfriday/auth-code-flow-postman-azure/assets/82184168/9b943fe0-4dc6-4e48-aec8-6dcea68d75df)
 
 </details>
 
@@ -97,7 +97,7 @@ we'll need to retrieve this secret again later.
 4. Now let's check the `API permissions` tab and verify that our app has the default access of `User.Read`
 for the `Microsoft Graph API` `resource` that we'll be querying.
 
-![image](https://github.com/acfriday/todolist-webapp-flask-sqlite3/assets/82184168/204c2521-11a1-45fa-8cf8-60066ccd316f)
+![image](https://github.com/acfriday/auth-code-flow-postman-azure/assets/82184168/ba1f9f2e-4dee-4e75-98ef-a27873b0b6ed)
 
 5. Finally we'll need to retrieve the Azure REST Endpoints we'll send out requests towards.
 The Authorization Endpoint `OAuth 2.0 authorization endpoint (v2)`
@@ -114,7 +114,7 @@ and Token Endpoint `OAuth 2.0 token endpoint (v2)` are what we'll copy from here
 
 1. In `Postman`, create a new `Request` and navigate to the `Authorization tab` and select `OAuth 2.0` as the auth `type`.
 
-![image](https://github.com/acfriday/todolist-webapp-flask-sqlite3/assets/82184168/5a7eab8f-f740-45e3-a6e5-e9020891d38a)
+![image](https://github.com/acfriday/auth-code-flow-postman-azure/assets/82184168/351aefe4-1987-4739-948e-16d9f81d9c61)
 
 2. This is where we'll input data for the values below:
 
